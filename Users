@@ -1,0 +1,67 @@
+#!/bin/bash
+# User Script for adding Said Users with there passwords
+if [ $(id -u) -eq 0 ]; then
+	read -p "Enter username : " username
+	read -s -p "Enter password : " password
+	egrep "^$username" /etc/passwd >/dev/null
+	if [ $? -eq 0 ]; then
+		echo "$username are real!"
+		exit 1
+	else
+		pass=$(perl -e 'print crypt($ARGV[0], "password")' $password)
+		useradd -m -p $pass $username
+		[ $? -eq 0 ] && echo "User added to system" || echo "Failed user added"
+	fi
+else
+	echo "Only root may add a user to the system"
+	exit 2
+fi
+
+
+
+
+
+
+
+
+
+
+
+--------------------------------------------------------
+
+#!/bin/bash
+echo
+ls
+echo
+echo "put the file you will be using:"
+read file
+while IFS5' ' read -r first last;
+do
+  
+    rannum=$( shuf -i 10-500 -n 1)
+    #echo " Username: " "$first@rannum"
+    useradd "$first$rannum" -m -d /home/"$first$rannum"
+    usermod -c "$first $last" "$first$rannum"
+    
+done < "$file"
+
+
+---------------------------------------------------------------
+
+
+#!/bin/sh
+for i in `more userlist.txt `
+do
+echo $i
+adduser $i
+done
+
+------------------------------------------------------------------
+
+#!/bin/sh
+for i in `more userlist.txt `
+do
+echo $i
+echo $i"123" | passwd –-stdin "$i"
+echo; echo "User $username’s password changed!"
+done
